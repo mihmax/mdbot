@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Class-Path: chronicle-map-3.14.6.jar chronicle-core-1.12.5.jar chronic
+ le-values-1.11.0.jar tools.jar javapoet-1.5.1.jar chronicle-threads-1
+ .12.3.jar affinity-3.1.7.jar slf4j-api-1.7.25.jar annotations-12.0.ja
+ r chronicle-wire-1.12.4.jar chronicle-bytes-1.12.10.jar chronicle-alg
+ orithms-1.1.10.jar jna-4.2.1.jar jna-platform-4.2.1.jar xstream-1.4.9
+ .jar xmlpull-1.1.3.1.jar xpp3_min-1.1.4c.jar jettison-1.3.8.jar stax-
+ api-1.0.1.jar pax-url-aether-2.4.5.jar jcl-over-slf4j-1.6.6.jar groov
+ y-2.5.0.jar commons-csv-1.5.jar javase-2.0.jar javase-3.1.0.jar core-
+ 3.1.0.jar core-2.0.jar jfreesvg-2.1.jar telegrambots-3.6.1.jar telegr
+ ambots-meta-3.6.1.jar guice-4.1.0.jar javax.inject-1.jar aopalliance-
+ 1.0.jar guava-19.0.jar jackson-annotations-2.8.0.jar jackson-jaxrs-js
+ on-provider-2.8.7.jar jackson-jaxrs-base-2.8.7.jar jackson-core-2.8.7
+ .jar jackson-module-jaxb-annotations-2.8.7.jar jackson-databind-2.8.7
+ .jar jersey-media-json-jackson-2.25.1.jar jersey-common-2.25.1.jar je
+ rsey-guava-2.25.1.jar osgi-resource-locator-1.0.1.jar jersey-entity-f
+ iltering-2.25.1.jar jersey-container-grizzly2-http-2.25.1.jar javax.i
+ nject-2.5.0-b32.jar grizzly-http-server-2.3.28.jar grizzly-http-2.3.2
+ 8.jar grizzly-framework-2.3.28.jar javax.ws.rs-api-2.0.1.jar jersey-s
+ erver-2.25.1.jar jersey-client-2.25.1.jar jersey-media-jaxb-2.25.1.ja
+ r javax.annotation-api-1.2.jar hk2-api-2.5.0-b32.jar hk2-utils-2.5.0-
+ b32.jar aopalliance-repackaged-2.5.0-b32.jar hk2-locator-2.5.0-b32.ja
+ r javassist-3.20.0-GA.jar validation-api-1.1.0.Final.jar json-2016081
+ 0.jar httpclient-4.5.3.jar httpcore-4.4.6.jar commons-logging-1.2.jar
+  commons-codec-1.9.jar httpmime-4.5.3.jar commons-io-2.5.jar
+Main-Class: ua.dp.md.bot.MDDniproBot
+
