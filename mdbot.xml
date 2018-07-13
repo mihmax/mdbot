@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="mdbot" default="all">
+  
+  
+  <property file="mdbot.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.orig/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="lib/ant-javafx.jar"/>
+      <include name="lib/dt.jar"/>
+      <include name="lib/javafx-mx.jar"/>
+      <include name="lib/jconsole.jar"/>
+      <include name="lib/packager.jar"/>
+      <include name="lib/sa-jdi.jar"/>
+      <include name="lib/tools.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.net.glxn.qrgen:javase:2.0.classpath">
+    <pathelement location="${basedir}/lib/qrgen/core-2.0.jar"/>
+    <pathelement location="${basedir}/lib/qrgen/core-3.1.0.jar"/>
+    <pathelement location="${basedir}/lib/qrgen/javase-2.0.jar"/>
+    <pathelement location="${basedir}/lib/qrgen/javase-3.1.0.jar"/>
+    <pathelement location="${basedir}/lib/qrgen/jfreesvg-2.1.jar"/>
+  </path>
+  
+  <path id="library.net.openhft:chronicle-map:3.14.6.classpath">
+    <pathelement location="${basedir}/lib/chronicle-map/affinity-3.1.7.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/annotations-12.0.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/chronicle-algorithms-1.1.10.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/chronicle-bytes-1.12.10.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/chronicle-core-1.12.5.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/chronicle-map-3.14.6.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/chronicle-threads-1.12.3.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/chronicle-values-1.11.0.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/chronicle-wire-1.12.4.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/javapoet-1.5.1.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/jcl-over-slf4j-1.6.6.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/jettison-1.3.8.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/jna-4.2.1.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/jna-platform-4.2.1.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/pax-url-aether-2.4.5.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/slf4j-api-1.7.25.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/stax-api-1.0.1.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/tools.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/xmlpull-1.1.3.1.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/xpp3_min-1.1.4c.jar"/>
+    <pathelement location="${basedir}/lib/chronicle-map/xstream-1.4.9.jar"/>
+  </path>
+  
+  <path id="library.org.apache.commons:commons-csv:1.5.classpath">
+    <pathelement location="${basedir}/lib/csv/commons-csv-1.5.jar"/>
+  </path>
+  
+  <path id="library.org.codehaus.groovy:groovy:2.5.0.classpath">
+    <pathelement location="${basedir}/lib/groovy/groovy-2.5.0.jar"/>
+  </path>
+  
+  <path id="library.org.telegram:telegrambots:3.6.1.classpath">
+    <pathelement location="${basedir}/lib/telegrambots/aopalliance-1.0.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/aopalliance-repackaged-2.5.0-b32.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/commons-codec-1.9.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/commons-io-2.5.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/commons-logging-1.2.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/grizzly-framework-2.3.28.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/grizzly-http-2.3.28.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/grizzly-http-server-2.3.28.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/guava-19.0.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/guice-4.1.0.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/hk2-api-2.5.0-b32.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/hk2-locator-2.5.0-b32.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/hk2-utils-2.5.0-b32.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/httpclient-4.5.3.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/httpcore-4.4.6.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/httpmime-4.5.3.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jackson-annotations-2.8.0.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jackson-core-2.8.7.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jackson-databind-2.8.7.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jackson-jaxrs-base-2.8.7.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jackson-jaxrs-json-provider-2.8.7.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jackson-module-jaxb-annotations-2.8.7.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/javassist-3.20.0-GA.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/javax.annotation-api-1.2.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/javax.inject-1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/javax.inject-2.5.0-b32.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/javax.ws.rs-api-2.0.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-client-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-common-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-container-grizzly2-http-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-entity-filtering-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-guava-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-media-jaxb-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-media-json-jackson-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/jersey-server-2.25.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/json-20160810.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/osgi-resource-locator-1.0.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/telegrambots-3.6.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/telegrambots-meta-3.6.1.jar"/>
+    <pathelement location="${basedir}/lib/telegrambots/validation-api-1.1.0.Final.jar"/>
+  </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <target name="register.custom.compilers">
+    <property name="grooovyc.task.sdk" value="library.org.codehaus.groovy:groovy:2.5.0.classpath"/>
+    <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="${grooovyc.task.sdk}"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module mdbot -->
+  
+  <dirname property="module.mdbot.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.mdbot" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.mdbot" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.mdbot" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.mdbot" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="mdbot.output.dir" value="${module.mdbot.basedir}/out/production/mdbot"/>
+  <property name="mdbot.testoutput.dir" value="${module.mdbot.basedir}/out/test/mdbot"/>
+  
+  <path id="mdbot.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="mdbot.module.production.classpath">
+    <path refid="${module.jdk.classpath.mdbot}"/>
+    <path refid="library.org.telegram:telegrambots:3.6.1.classpath"/>
+    <path refid="library.org.codehaus.groovy:groovy:2.5.0.classpath"/>
+    <path refid="library.net.openhft:chronicle-map:3.14.6.classpath"/>
+    <path refid="library.net.glxn.qrgen:javase:2.0.classpath"/>
+    <path refid="library.org.apache.commons:commons-csv:1.5.classpath"/>
+  </path>
+  
+  <path id="mdbot.runtime.production.module.classpath">
+    <pathelement location="${mdbot.output.dir}"/>
+    <path refid="library.org.telegram:telegrambots:3.6.1.classpath"/>
+    <path refid="library.org.codehaus.groovy:groovy:2.5.0.classpath"/>
+    <path refid="library.net.openhft:chronicle-map:3.14.6.classpath"/>
+    <path refid="library.net.glxn.qrgen:javase:2.0.classpath"/>
+    <path refid="library.org.apache.commons:commons-csv:1.5.classpath"/>
+  </path>
+  
+  <path id="mdbot.module.classpath">
+    <path refid="${module.jdk.classpath.mdbot}"/>
+    <pathelement location="${mdbot.output.dir}"/>
+    <path refid="library.org.telegram:telegrambots:3.6.1.classpath"/>
+    <path refid="library.org.codehaus.groovy:groovy:2.5.0.classpath"/>
+    <path refid="library.net.openhft:chronicle-map:3.14.6.classpath"/>
+    <path refid="library.net.glxn.qrgen:javase:2.0.classpath"/>
+    <path refid="library.org.apache.commons:commons-csv:1.5.classpath"/>
+  </path>
+  
+  <path id="mdbot.runtime.module.classpath">
+    <pathelement location="${mdbot.testoutput.dir}"/>
+    <pathelement location="${mdbot.output.dir}"/>
+    <path refid="library.org.telegram:telegrambots:3.6.1.classpath"/>
+    <path refid="library.org.codehaus.groovy:groovy:2.5.0.classpath"/>
+    <path refid="library.net.openhft:chronicle-map:3.14.6.classpath"/>
+    <path refid="library.net.glxn.qrgen:javase:2.0.classpath"/>
+    <path refid="library.org.apache.commons:commons-csv:1.5.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.mdbot">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.mdbot">
+    <patternset refid="excluded.from.module.mdbot"/>
+  </patternset>
+  
+  <path id="mdbot.module.sourcepath">
+    <dirset dir="${module.mdbot.basedir}">
+      <include name="src"/>
+      <include name="lib"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.mdbot" depends="compile.module.mdbot.production,compile.module.mdbot.tests" description="Compile module mdbot"/>
+  
+  <target name="compile.module.mdbot.production" depends="register.custom.compilers" description="Compile module mdbot; production classes">
+    <mkdir dir="${mdbot.output.dir}"/>
+    <groovyc destdir="${mdbot.output.dir}" fork="yes">
+      <src refid="mdbot.module.sourcepath"/>
+      <classpath refid="mdbot.module.production.classpath"/>
+      <patternset refid="excluded.from.compilation.mdbot"/>
+      <javac debug="${compiler.debug}">
+        <compilerarg line="${compiler.args.mdbot}"/>
+      </javac>
+    </groovyc>
+    
+    <copy todir="${mdbot.output.dir}">
+      <fileset dir="${module.mdbot.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.mdbot.basedir}/lib">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.mdbot.tests" depends="register.custom.compilers,compile.module.mdbot.production" description="compile module mdbot; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.mdbot" description="cleanup module">
+    <delete dir="${mdbot.output.dir}"/>
+    <delete dir="${mdbot.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.mdbot, clean.artifact.mdbot:jar" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.mdbot" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.mdbot:jar" value="${basedir}/out/artifacts/mdbot_jar"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.mdbot.jar" value="${artifacts.temp.dir}/mdbot.jar"/>
+  </target>
+  
+  <target name="clean.artifact.mdbot:jar" description="clean mdbot:jar artifact output">
+    <delete dir="${artifact.output.mdbot:jar}"/>
+  </target>
+  
+  <target name="artifact.mdbot:jar" depends="init.artifacts, compile.module.mdbot" description="Build &#39;mdbot:jar&#39; artifact">
+    <mkdir dir="${artifact.output.mdbot:jar}"/>
+    <jar destfile="${temp.jar.path.mdbot.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${mdbot.output.dir}"/>
+    </jar>
+    <copy file="${temp.jar.path.mdbot.jar}" tofile="${artifact.output.mdbot:jar}/mdbot.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/chronicle-map-3.14.6.jar" tofile="${artifact.output.mdbot:jar}/chronicle-map-3.14.6.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/chronicle-core-1.12.5.jar" tofile="${artifact.output.mdbot:jar}/chronicle-core-1.12.5.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/chronicle-values-1.11.0.jar" tofile="${artifact.output.mdbot:jar}/chronicle-values-1.11.0.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/tools.jar" tofile="${artifact.output.mdbot:jar}/tools.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/javapoet-1.5.1.jar" tofile="${artifact.output.mdbot:jar}/javapoet-1.5.1.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/chronicle-threads-1.12.3.jar" tofile="${artifact.output.mdbot:jar}/chronicle-threads-1.12.3.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/affinity-3.1.7.jar" tofile="${artifact.output.mdbot:jar}/affinity-3.1.7.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/slf4j-api-1.7.25.jar" tofile="${artifact.output.mdbot:jar}/slf4j-api-1.7.25.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/annotations-12.0.jar" tofile="${artifact.output.mdbot:jar}/annotations-12.0.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/chronicle-wire-1.12.4.jar" tofile="${artifact.output.mdbot:jar}/chronicle-wire-1.12.4.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/chronicle-bytes-1.12.10.jar" tofile="${artifact.output.mdbot:jar}/chronicle-bytes-1.12.10.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/chronicle-algorithms-1.1.10.jar" tofile="${artifact.output.mdbot:jar}/chronicle-algorithms-1.1.10.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/jna-4.2.1.jar" tofile="${artifact.output.mdbot:jar}/jna-4.2.1.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/jna-platform-4.2.1.jar" tofile="${artifact.output.mdbot:jar}/jna-platform-4.2.1.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/xstream-1.4.9.jar" tofile="${artifact.output.mdbot:jar}/xstream-1.4.9.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/xmlpull-1.1.3.1.jar" tofile="${artifact.output.mdbot:jar}/xmlpull-1.1.3.1.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/xpp3_min-1.1.4c.jar" tofile="${artifact.output.mdbot:jar}/xpp3_min-1.1.4c.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/jettison-1.3.8.jar" tofile="${artifact.output.mdbot:jar}/jettison-1.3.8.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/stax-api-1.0.1.jar" tofile="${artifact.output.mdbot:jar}/stax-api-1.0.1.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/pax-url-aether-2.4.5.jar" tofile="${artifact.output.mdbot:jar}/pax-url-aether-2.4.5.jar"/>
+    <copy file="${basedir}/lib/chronicle-map/jcl-over-slf4j-1.6.6.jar" tofile="${artifact.output.mdbot:jar}/jcl-over-slf4j-1.6.6.jar"/>
+    <copy file="${basedir}/lib/groovy/groovy-2.5.0.jar" tofile="${artifact.output.mdbot:jar}/groovy-2.5.0.jar"/>
+    <copy file="${basedir}/lib/csv/commons-csv-1.5.jar" tofile="${artifact.output.mdbot:jar}/commons-csv-1.5.jar"/>
+    <copy file="${basedir}/lib/qrgen/javase-2.0.jar" tofile="${artifact.output.mdbot:jar}/javase-2.0.jar"/>
+    <copy file="${basedir}/lib/qrgen/javase-3.1.0.jar" tofile="${artifact.output.mdbot:jar}/javase-3.1.0.jar"/>
+    <copy file="${basedir}/lib/qrgen/core-3.1.0.jar" tofile="${artifact.output.mdbot:jar}/core-3.1.0.jar"/>
+    <copy file="${basedir}/lib/qrgen/core-2.0.jar" tofile="${artifact.output.mdbot:jar}/core-2.0.jar"/>
+    <copy file="${basedir}/lib/qrgen/jfreesvg-2.1.jar" tofile="${artifact.output.mdbot:jar}/jfreesvg-2.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/telegrambots-3.6.1.jar" tofile="${artifact.output.mdbot:jar}/telegrambots-3.6.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/telegrambots-meta-3.6.1.jar" tofile="${artifact.output.mdbot:jar}/telegrambots-meta-3.6.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/guice-4.1.0.jar" tofile="${artifact.output.mdbot:jar}/guice-4.1.0.jar"/>
+    <copy file="${basedir}/lib/telegrambots/javax.inject-1.jar" tofile="${artifact.output.mdbot:jar}/javax.inject-1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/aopalliance-1.0.jar" tofile="${artifact.output.mdbot:jar}/aopalliance-1.0.jar"/>
+    <copy file="${basedir}/lib/telegrambots/guava-19.0.jar" tofile="${artifact.output.mdbot:jar}/guava-19.0.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jackson-annotations-2.8.0.jar" tofile="${artifact.output.mdbot:jar}/jackson-annotations-2.8.0.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jackson-jaxrs-json-provider-2.8.7.jar" tofile="${artifact.output.mdbot:jar}/jackson-jaxrs-json-provider-2.8.7.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jackson-jaxrs-base-2.8.7.jar" tofile="${artifact.output.mdbot:jar}/jackson-jaxrs-base-2.8.7.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jackson-core-2.8.7.jar" tofile="${artifact.output.mdbot:jar}/jackson-core-2.8.7.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jackson-module-jaxb-annotations-2.8.7.jar" tofile="${artifact.output.mdbot:jar}/jackson-module-jaxb-annotations-2.8.7.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jackson-databind-2.8.7.jar" tofile="${artifact.output.mdbot:jar}/jackson-databind-2.8.7.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-media-json-jackson-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-media-json-jackson-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-common-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-common-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-guava-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-guava-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/osgi-resource-locator-1.0.1.jar" tofile="${artifact.output.mdbot:jar}/osgi-resource-locator-1.0.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-entity-filtering-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-entity-filtering-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-container-grizzly2-http-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-container-grizzly2-http-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/javax.inject-2.5.0-b32.jar" tofile="${artifact.output.mdbot:jar}/javax.inject-2.5.0-b32.jar"/>
+    <copy file="${basedir}/lib/telegrambots/grizzly-http-server-2.3.28.jar" tofile="${artifact.output.mdbot:jar}/grizzly-http-server-2.3.28.jar"/>
+    <copy file="${basedir}/lib/telegrambots/grizzly-http-2.3.28.jar" tofile="${artifact.output.mdbot:jar}/grizzly-http-2.3.28.jar"/>
+    <copy file="${basedir}/lib/telegrambots/grizzly-framework-2.3.28.jar" tofile="${artifact.output.mdbot:jar}/grizzly-framework-2.3.28.jar"/>
+    <copy file="${basedir}/lib/telegrambots/javax.ws.rs-api-2.0.1.jar" tofile="${artifact.output.mdbot:jar}/javax.ws.rs-api-2.0.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-server-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-server-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-client-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-client-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/jersey-media-jaxb-2.25.1.jar" tofile="${artifact.output.mdbot:jar}/jersey-media-jaxb-2.25.1.jar"/>
+    <copy file="${basedir}/lib/telegrambots/javax.annotation-api-1.2.jar" tofile="${artifact.output.mdbot:jar}/javax.annotation-api-1.2.jar"/>
+    <copy file="${basedir}/lib/telegrambots/hk2-api-2.5.0-b32.jar" tofile="${artifact.output.mdbot:jar}/hk2-api-2.5.0-b32.jar"/>
+    <copy file="${basedir}/lib/telegrambots/hk2-utils-2.5.0-b32.jar" tofile="${artifact.output.mdbot:jar}/hk2-utils-2.5.0-b32.jar"/>
+    <copy file="${basedir}/lib/telegrambots/aopalliance-repackaged-2.5.0-b32.jar" tofile="${artifact.output.mdbot:jar}/aopalliance-repackaged-2.5.0-b32.jar"/>
+    <copy file="${basedir}/lib/telegrambots/hk2-locator-2.5.0-b32.jar" tofile="${artifact.output.mdbot:jar}/hk2-locator-2.5.0-b32.jar"/>
+    <copy file="${basedir}/lib/telegrambots/javassist-3.20.0-GA.jar" tofile="${artifact.output.mdbot:jar}/javassist-3.20.0-GA.jar"/>
+    <copy file="${basedir}/lib/telegrambots/validation-api-1.1.0.Final.jar" tofile="${artifact.output.mdbot:jar}/validation-api-1.1.0.Final.jar"/>
+    <copy file="${basedir}/lib/telegrambots/json-20160810.jar" tofile="${artifact.output.mdbot:jar}/json-20160810.jar"/>
+    <copy file="${basedir}/lib/telegrambots/httpclient-4.5.3.jar" tofile="${artifact.output.mdbot:jar}/httpclient-4.5.3.jar"/>
+    <copy file="${basedir}/lib/telegrambots/httpcore-4.4.6.jar" tofile="${artifact.output.mdbot:jar}/httpcore-4.4.6.jar"/>
+    <copy file="${basedir}/lib/telegrambots/commons-logging-1.2.jar" tofile="${artifact.output.mdbot:jar}/commons-logging-1.2.jar"/>
+    <copy file="${basedir}/lib/telegrambots/commons-codec-1.9.jar" tofile="${artifact.output.mdbot:jar}/commons-codec-1.9.jar"/>
+    <copy file="${basedir}/lib/telegrambots/httpmime-4.5.3.jar" tofile="${artifact.output.mdbot:jar}/httpmime-4.5.3.jar"/>
+    <copy file="${basedir}/lib/telegrambots/commons-io-2.5.jar" tofile="${artifact.output.mdbot:jar}/commons-io-2.5.jar"/>
+    <mkdir dir="${artifact.output.mdbot:jar}/missions"/>
+    <copy todir="${artifact.output.mdbot:jar}/missions">
+      <fileset dir="${basedir}/missions"/>
+    </copy>
+    <copy file="${basedir}/run_mdbot.sh" tofile="${artifact.output.mdbot:jar}/run_mdbot.sh"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.mdbot:jar" description="Build all artifacts">
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
