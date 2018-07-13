@@ -576,10 +576,11 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         println "Today is ${new Date()}"
         println ''
 
-        if (args.length in [3,4]) {
-            println 'ERROR: REQUIRES 3 ARGUMENTS'
+        if (! (args.length in [3,4])) {
+            println 'ERROR: REQUIRES 3 or 4 ARGUMENTS'
             println 'Usage: java -jar mdbot.jar "Telegram Bot Name" "Telegram Bot Token" "MD Registrar Event ID" "true if this MD Registrar event is considered a test one"'
             println ''
+            System.exit -1
         }
 
         String botName = args[0]
