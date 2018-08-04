@@ -29,7 +29,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 
 /**
  * @author Maxym "mihmax" Mykhalchuk
- * @version 4
+ * @version 5
  *
  * Telegram Bot for Dnipro Mission Day to be held 11 August 2018.
  * Maintained by @mihmax.
@@ -192,9 +192,27 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                  ]]
     }
 
+    private static final String UI_PREREG_NEW_EN = 'In order to generate a QR Code, and speed up registration process, please enter your Ingress username.'
+    private static final String UI_PREREG_OLD_EN = 'Please check we got your username correctly: {ingress}, and show this QR code during registration. If it is wrong, please enter your Ingress username one more time.'
+    private static final String UI_PREREG_NEW_UK = 'Для генерації QR-кода та пришвидшення процесу реєстрації, введіть своє ім\'я користувача у грі Ingress.'
+    private static final String UI_PREREG_OLD_UK = 'Перевірте записане нами ім\'я користувача Ingress - {ingress}, та покажіть цей QR код під час реєстрації. Якщо введене ім\'я користувача невірне, введіть ім\'я користувача Ingress ще раз.'
+    private static final String UI_PREREG_NEW_RU = 'Для генерации QR-кода и ускорения процесса регистрации, введите своё имя пользователя в ирге Ingress.'
+    private static final String UI_PREREG_OLD_RU = 'Проверьте правильность Вашего имени пользователя Ingress - {ingress}, и покажите этот QR код во время регистрации. Если введённое имя пользователя неправильно, введите имя пользователя Ingress ещё раз.'
+    private static final Map<Language, String> UI_PREREG_NEWs = [
+        (EN): UI_PREREG_NEW_EN,
+        (UK): UI_PREREG_NEW_UK,
+        (RU): UI_PREREG_NEW_RU,
+    ]
+    private static final Map<Language, String> UI_PREREG_OLDs = [
+            (EN): UI_PREREG_OLD_EN,
+            (UK): UI_PREREG_OLD_UK,
+            (RU): UI_PREREG_OLD_RU,
+    ]
+
     private ChronicleMap<CharSequence, Language> store_languages
     private ChronicleMap<CharSequence, List<Integer>> store_messages
     private ChronicleMap<CharSequence, Integer> store_current_mission
+    private ChronicleMap<CharSequence, CharSequence> store_ingress_username
     private List<MissionData> missions
 
     MDDniproBot(String botName, String botToken, String mdEventId, boolean mdTestEvent) {
@@ -226,9 +244,17 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                 .entries(5000)
                 .createOrRecoverPersistedTo(new File('store_current_mission'))
 
+        store_ingress_username = ChronicleMapBuilder.of(CharSequence.class, String.class)
+                .name("store_ingress_username")
+                .averageKey("AAA")
+                .entries(5000)
+                .averageValueSize(20)
+                .createOrRecoverPersistedTo(new File('store_ingress_username'))
+
         println store_languages
         println store_messages
         println store_current_mission
+        println store_ingress_username
 
         // Read mission data
         missions = MissionData.readMissions(new File('./missions/'))
@@ -241,8 +267,14 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         // println '--'
         if (update.message) {
             // What's this?
-            // Starting a new conversation
-            sendInfo(update.message.chatId, update.message.from)
+            if (update.message.text == '/start') {
+                // Starting a new conversation
+                sendInfo(update.message.chatId, update.message.from)
+            } else {
+                // otherwise we think this is user's Ingress username
+                store_ingress_username.put(update.message.from.userName, update.message.text)
+                replyPrereg(update.message.chatId, update.message.from)
+            }
         } else if (update.callbackQuery) {
             // Inline keyboard pressed
             def query = update.callbackQuery
@@ -272,7 +304,7 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                     replyMissionMap(query)
                     break
                 case CMD_PREREG:
-                    replyPrereg(query)
+                    replyPrereg(query.message.chatId, query.from)
                     break
             }
         }
@@ -429,32 +461,37 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         replyMissionDescription(query)
     }
 
-    private replyPrereg(CallbackQuery query) {
-        Long chatId = query.message.chatId
-        User user = query.from
+    private replyPrereg(long chatId, User user) {
         Language language = detectUserLanguage(user)
-
         deletePastMessages(chatId, user)
 
-        Message photoMessage = sendPhoto generateQRcode(query.message.chatId, query.from.userName)
+        Message photoMessage = null
+        String uiMessage = null
+
+        String ingressName = store_ingress_username[user.userName]
+        if (ingressName) {
+            photoMessage = sendPhoto generateQRcode(chatId, ingressName)
+            uiMessage = UI_PREREG_OLDs[language].replace('{ingress}', ingressName)
+        } else {
+            uiMessage = UI_PREREG_NEWs[language]
+        }
+
         def mainMessage = dniproSendMessage(new SendMessage().tap {
-            it.chatId = query.message.chatId
+            it.chatId = chatId
             it.parseMode = 'Markdown'
-            it.text = 'Show this QR Code to the orgs. Note - you can access it any time in the Pre-registration menu'
+            it.text = uiMessage
             it.replyMarkup = KEYBOARD_INFOs[language]
         })
 
-        store_messages.put(user.userName, [photoMessage.messageId, mainMessage.messageId])
+        store_messages.put(user.userName, photoMessage ? [photoMessage.messageId, mainMessage.messageId] : [mainMessage.messageId])
     }
 
     private SendPhoto generateQRcode(long chatId, String userName) {
         SendPhoto qrcode = new SendPhoto()
         qrcode.chatId = chatId
 
-        userName = 'testnick'
-        String userId = '8639029916'
+        long userId = Long.parseLong(userName.digest('MD5').substring(10,18), 16)
         String qrcodeMessage = "IngressMdRegistrar:${mdEventId}:${userName}:${userId}"
-        qrcodeMessage = qrcodeMessage + qrcodeMessage.digest('SHA-256')
         QRCode code = QRCode.from(qrcodeMessage).withSize(400, 400)
         qrcode.setNewPhoto("Reg ${userName}", new ByteArrayInputStream(code.stream().toByteArray()))
 
@@ -603,7 +640,7 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
     static void main(String... args) {
         println 'Telegram Bot for Ingress Mission Day to be held 11 August 2018 in Dnipro, Ukraine.'
         println 'Maintained by @mihmax'
-        println 'Version 4'
+        println 'Version 5'
         println "Today is ${new Date()}"
         println ''
 
