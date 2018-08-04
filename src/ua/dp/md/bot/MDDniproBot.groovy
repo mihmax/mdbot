@@ -43,6 +43,7 @@ class MDDniproBot extends TelegramLongPollingBot {
     private static final String CMD_NEXT = 'next'
     private static final String CMD_MAP = 'map'
     private static final String CMD_DESC = 'description'
+    private static final String CMD_PREREG = 'preregister'
 
     private static final String UI_LANG_EN = 'English'
     private static final String UI_LANG_UK = 'Українська'
@@ -129,11 +130,20 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
     private static final InlineKeyboardButton BTN_SETTINGS_RU = new InlineKeyboardButton('Настройки').tap {
         it.callbackData = CMD_SETTINGS
     }
+    private static final InlineKeyboardButton BTN_PREREG_EN = new InlineKeyboardButton('Pre-register').tap {
+        it.callbackData = CMD_PREREG
+    }
+    private static final InlineKeyboardButton BTN_PREREG_UK = new InlineKeyboardButton('Попередня реєстрація').tap {
+        it.callbackData = CMD_PREREG
+    }
+    private static final InlineKeyboardButton BTN_PREREG_RU = new InlineKeyboardButton('Предварительная регистрация').tap {
+        it.callbackData = CMD_PREREG
+    }
 
     private static final Map<Language, InlineKeyboardMarkup> KEYBOARD_INFOs = [
-            (EN): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_EN, BTN_MISSIONS_EN], [BTN_SETTINGS_EN]] },
-            (UK): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_UK, BTN_MISSIONS_UK], [BTN_SETTINGS_UK]] },
-            (RU): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_RU, BTN_MISSIONS_RU], [BTN_SETTINGS_RU]] },
+            (EN): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_EN, BTN_MISSIONS_EN], [BTN_PREREG_EN], [BTN_SETTINGS_EN]] },
+            (UK): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_UK, BTN_MISSIONS_UK], [BTN_PREREG_UK], [BTN_SETTINGS_UK]] },
+            (RU): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_RU, BTN_MISSIONS_RU], [BTN_PREREG_RU], [BTN_SETTINGS_RU]] },
     ]
 
     private static final InlineKeyboardButton BTN_PREV = new InlineKeyboardButton('<').tap {
@@ -260,6 +270,9 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                     break
                 case CMD_MAP:
                     replyMissionMap(query)
+                    break
+                case CMD_PREREG:
+                    replyPrereg(query)
                     break
             }
         }
@@ -416,16 +429,35 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         replyMissionDescription(query)
     }
 
+    private replyPrereg(CallbackQuery query) {
+        Long chatId = query.message.chatId
+        User user = query.from
+        Language language = detectUserLanguage(user)
 
-    private SendPhoto replyQRcode(Message question) {
+        deletePastMessages(chatId, user)
+
+        Message photoMessage = sendPhoto generateQRcode(query.message.chatId, query.from.userName)
+        def mainMessage = dniproSendMessage(new SendMessage().tap {
+            it.chatId = query.message.chatId
+            it.parseMode = 'Markdown'
+            it.text = 'Show this QR Code to the orgs. Note - you can access it any time in the Pre-registration menu'
+            it.replyMarkup = KEYBOARD_INFOs[language]
+        })
+
+        store_messages.put(user.userName, [photoMessage.messageId, mainMessage.messageId])
+
+        sendPhoto generateQRcode(query.message.chatId, query.from.userName)
+    }
+
+    private SendPhoto generateQRcode(long chatId, String userName) {
         SendPhoto qrcode = new SendPhoto()
-        qrcode.chatId = question.chatId
+        qrcode.chatId = chatId
 
-        String qrcodeMessage = "MDDRIPRO/INGRESSNICK/${question.from.userName}/TELEGRAMNICK/${question.from.userName}/EMAIL/${question.from.userName}@someverylongemail.domain.dot.com/SIGNATURE/".toString()
+        String userId = '12345'
+        String qrcodeMessage = "IngressMdRegistrar:${mdEventId}:${userName}:${userId}"
         qrcodeMessage = qrcodeMessage + qrcodeMessage.digest('SHA-256')
-        QRCode code = new QRCode(qrcodeMessage)
-        code.withSize(200, 200)
-        qrcode.setNewPhoto("Reg ${question.from.userName}", new ByteArrayInputStream(code.stream().toByteArray()))
+        QRCode code = QRCode.from(qrcodeMessage).withSize(400, 400)
+        qrcode.setNewPhoto("Reg ${userName}", new ByteArrayInputStream(code.stream().toByteArray()))
 
         qrcode
     }
