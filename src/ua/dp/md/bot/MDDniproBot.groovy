@@ -445,15 +445,14 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         })
 
         store_messages.put(user.userName, [photoMessage.messageId, mainMessage.messageId])
-
-        sendPhoto generateQRcode(query.message.chatId, query.from.userName)
     }
 
     private SendPhoto generateQRcode(long chatId, String userName) {
         SendPhoto qrcode = new SendPhoto()
         qrcode.chatId = chatId
 
-        String userId = '12345'
+        userName = 'testnick'
+        String userId = '8639029916'
         String qrcodeMessage = "IngressMdRegistrar:${mdEventId}:${userName}:${userId}"
         qrcodeMessage = qrcodeMessage + qrcodeMessage.digest('SHA-256')
         QRCode code = QRCode.from(qrcodeMessage).withSize(400, 400)
