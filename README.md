@@ -4,14 +4,27 @@ Maintained by @mihmax.
 
 # Main functions
 
-* Link to the shop
-* List of missions 
-* Generate QR Code for MD app
+* Trilingual
+* Two basic screens:
+** Main screen with text
+** Missions screen
+* Autodetect user language, allow change
+* Stores basic information about the user
+* List of missions with maps
+** Since v6 with fast navigation
+
+# Technical trivia
+
+* Bot runs in long-polling mode (no public IP required)
+* Written in Groovy (bundles Groovy 2.5.2 runtime)
+* Known to compile on Java 8 (did not try other versions)
+* Runs on Java 8 (Chronicle Map does not work on Java 10)
 
 # TODO
 
-* Content update
-* Robust storage
-* Refactoring
-* Memory footprint
-* Hosting improvements
+* Read all content (no hardcoded content)
+* Variable mission number (currently 24 missions are hardcoded)
+* Code Cleanup
+* Robust storage (currently Chronicle Maps is used for multiple String - String maps)
+** Part 1 - is Chronicle Maps really needed? (27MB or ~ 15% of libraries that do not run on Java 10)
+** Part 2 - move all settings to one serializable class to store in 1 Chronicle Map
