@@ -59,6 +59,7 @@ class MissionData {
                             row.get(9).trim(),
                             row.get(14).trim()
                     ))
+                    missions.get(missionNumber - 1).portals.sort {it.portalOrder}
                 } else {
                     MissionData mission = new MissionData(
                             directory,
