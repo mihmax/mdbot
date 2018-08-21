@@ -27,6 +27,7 @@ Maintained by @mihmax.
 * Robust storage (currently Chronicle Maps is used for multiple String - String maps)
 ** Part 1 - is Chronicle Maps really needed? (27MB or ~ 15% of libraries that do not run on Java 10)
 ** Part 2 - move all settings to one serializable class to store in 1 Chronicle Map
+* Idea: Show global mission map when user opens Missions
 
 # Release Notes
 
