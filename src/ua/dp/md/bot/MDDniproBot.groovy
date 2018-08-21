@@ -255,7 +255,7 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                 try {
                     missionNumber = Integer.parseInt(update.message.text)
                 } catch (ignored) {}
-                if (missionNumber >= 1 && missionNumber <= 24) {
+                if (missionNumber >= 1 && missionNumber <= missions.size()) {
                     store_current_mission[update.message.from.userName] = missionNumber
                     replyMissionDescription(update.message.chatId, update.message.from)
                 }
@@ -290,7 +290,7 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                     break
                 default: // map number
                     int missionNumber = Integer.parseInt(query.data)
-                    if (missionNumber >= 1 && missionNumber <= 24) {
+                    if (missionNumber >= 1 && missionNumber <= missions.size()) {
                         store_current_mission[query.from.userName] = missionNumber
                         replyMissionDescription(query.message.chatId, query.from)
                     }
