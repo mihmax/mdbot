@@ -29,7 +29,7 @@ hs_err_pid*
 # IntelliJ IDEA
 /.idea/
 /*.iml
-/*.sh
+/dp_*.sh
 /out
 
 # MacOSX

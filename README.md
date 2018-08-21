@@ -15,6 +15,7 @@ Maintained by @mihmax.
 
 # Technical trivia
 
+* To build, run `./build.sh`, results will be in `out/artifacts/mdbot_jar`
 * Bot runs in long-polling mode (no public IP required)
 * Written in Groovy (bundles Groovy 2.5.2 runtime)
 * Known to compile on Java 8 (did not try other versions)
