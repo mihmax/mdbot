@@ -28,7 +28,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 
 /**
  * @author Maxym "mihmax" Mykhalchuk
- * @version 6
+ * @version 7-alpha
  *
  * Telegram Bot for Dnipro Mission Day to be held 11 August 2018.
  * Maintained by @mihmax.
@@ -42,7 +42,6 @@ class MDDniproBot extends TelegramLongPollingBot {
     private static final String CMD_NEXT = 'next'
     private static final String CMD_MAP = 'map'
     private static final String CMD_DESC = 'description'
-    // TODO: hacking private static final String CMD_PREREG = 'preregister'
 
     private static final String UI_LANG_EN = 'English'
     private static final String UI_LANG_UK = 'Українська'
@@ -129,27 +128,13 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
     private static final InlineKeyboardButton BTN_SETTINGS_RU = new InlineKeyboardButton('Настройки').tap {
         it.callbackData = CMD_SETTINGS
     }
-    /* TODO: hacking
-    private static final InlineKeyboardButton BTN_PREREG_EN = new InlineKeyboardButton('Pre-register').tap {
-        it.callbackData = CMD_PREREG
-    }
-    private static final InlineKeyboardButton BTN_PREREG_UK = new InlineKeyboardButton('Попередня реєстрація').tap {
-        it.callbackData = CMD_PREREG
-    }
-    private static final InlineKeyboardButton BTN_PREREG_RU = new InlineKeyboardButton('Предварительная регистрация').tap {
-        it.callbackData = CMD_PREREG
-    }
-    */
 
     private static final Map<Language, InlineKeyboardMarkup> KEYBOARD_INFOs = [
             (EN): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_EN, BTN_MISSIONS_EN],
-                                                                  // TODO: hacking [BTN_PREREG_EN],
                                                                   [BTN_SETTINGS_EN]] },
             (UK): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_UK, BTN_MISSIONS_UK],
-                                                                  // TODO: hacking [BTN_PREREG_UK],
                                                                   [BTN_SETTINGS_UK]] },
             (RU): new InlineKeyboardMarkup().tap { it.keyboard = [[BTN_INFO_RU, BTN_MISSIONS_RU],
-                                                                  // TODO: hacking [BTN_PREREG_RU],
                                                                   [BTN_SETTINGS_RU]] },
     ]
 
@@ -182,29 +167,10 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         it.callbackData = CMD_INFO
     }
     private static final InlineKeyboardButton BTN_01 = new InlineKeyboardButton('1').tap { it.callbackData = '1' }
-    private static final InlineKeyboardButton BTN_02 = new InlineKeyboardButton('2').tap { it.callbackData = '2' }
-    private static final InlineKeyboardButton BTN_03 = new InlineKeyboardButton('3').tap { it.callbackData = '3' }
-    private static final InlineKeyboardButton BTN_04 = new InlineKeyboardButton('4').tap { it.callbackData = '4' }
-    private static final InlineKeyboardButton BTN_05 = new InlineKeyboardButton('5').tap { it.callbackData = '5' }
     private static final InlineKeyboardButton BTN_06 = new InlineKeyboardButton('6').tap { it.callbackData = '6' }
-    private static final InlineKeyboardButton BTN_07 = new InlineKeyboardButton('7').tap { it.callbackData = '7' }
-    private static final InlineKeyboardButton BTN_08 = new InlineKeyboardButton('8').tap { it.callbackData = '8' }
-    private static final InlineKeyboardButton BTN_09 = new InlineKeyboardButton('9').tap { it.callbackData = '9' }
-    private static final InlineKeyboardButton BTN_10 = new InlineKeyboardButton('10').tap { it.callbackData = '10' }
     private static final InlineKeyboardButton BTN_11 = new InlineKeyboardButton('11').tap { it.callbackData = '11' }
-    private static final InlineKeyboardButton BTN_12 = new InlineKeyboardButton('12').tap { it.callbackData = '12' }
-    private static final InlineKeyboardButton BTN_13 = new InlineKeyboardButton('13').tap { it.callbackData = '13' }
-    private static final InlineKeyboardButton BTN_14 = new InlineKeyboardButton('14').tap { it.callbackData = '14' }
-    private static final InlineKeyboardButton BTN_15 = new InlineKeyboardButton('15').tap { it.callbackData = '15' }
     private static final InlineKeyboardButton BTN_16 = new InlineKeyboardButton('16').tap { it.callbackData = '16' }
-    private static final InlineKeyboardButton BTN_17 = new InlineKeyboardButton('17').tap { it.callbackData = '17' }
-    private static final InlineKeyboardButton BTN_18 = new InlineKeyboardButton('18').tap { it.callbackData = '18' }
-    private static final InlineKeyboardButton BTN_19 = new InlineKeyboardButton('19').tap { it.callbackData = '19' }
-    private static final InlineKeyboardButton BTN_20 = new InlineKeyboardButton('20').tap { it.callbackData = '20' }
     private static final InlineKeyboardButton BTN_21 = new InlineKeyboardButton('21').tap { it.callbackData = '21' }
-    private static final InlineKeyboardButton BTN_22 = new InlineKeyboardButton('22').tap { it.callbackData = '22' }
-    private static final InlineKeyboardButton BTN_23 = new InlineKeyboardButton('23').tap { it.callbackData = '23' }
-    private static final InlineKeyboardButton BTN_24 = new InlineKeyboardButton('24').tap { it.callbackData = '24' }
 
     private static final Map<Language, InlineKeyboardMarkup> KEYBOARD_MISSIONs = [
             (EN): new InlineKeyboardMarkup().tap {
@@ -233,39 +199,17 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                  ]]
     }
 
-    /* TODO: hacking
-    private static final String UI_PREREG_NEW_EN = 'In order to generate a QR Code, and speed up registration process, please enter your Ingress username.'
-    private static final String UI_PREREG_OLD_EN = 'Please check we got your username correctly: {ingress}, and show this QR code during registration. If it is wrong, please enter your Ingress username one more time.'
-    private static final String UI_PREREG_NEW_UK = 'Для генерації QR-кода та пришвидшення процесу реєстрації, введіть своє ім\'я користувача у грі Ingress.'
-    private static final String UI_PREREG_OLD_UK = 'Перевірте записане нами ім\'я користувача Ingress - {ingress}, та покажіть цей QR код під час реєстрації. Якщо введене ім\'я користувача невірне, введіть ім\'я користувача Ingress ще раз.'
-    private static final String UI_PREREG_NEW_RU = 'Для генерации QR-кода и ускорения процесса регистрации, введите своё имя пользователя в ирге Ingress.'
-    private static final String UI_PREREG_OLD_RU = 'Проверьте правильность Вашего имени пользователя Ingress - {ingress}, и покажите этот QR код во время регистрации. Если введённое имя пользователя неправильно, введите имя пользователя Ingress ещё раз.'
-    private static final Map<Language, String> UI_PREREG_NEWs = [
-        (EN): UI_PREREG_NEW_EN,
-        (UK): UI_PREREG_NEW_UK,
-        (RU): UI_PREREG_NEW_RU,
-    ]
-    private static final Map<Language, String> UI_PREREG_OLDs = [
-            (EN): UI_PREREG_OLD_EN,
-            (UK): UI_PREREG_OLD_UK,
-            (RU): UI_PREREG_OLD_RU,
-    ]
-    */
-
     private ChronicleMap<CharSequence, Language> store_languages
     private ChronicleMap<CharSequence, List<Integer>> store_messages
     private ChronicleMap<CharSequence, Integer> store_current_mission
-    // private ChronicleMap<CharSequence, CharSequence> store_ingress_username
     private List<MissionData> missions
 
-    MDDniproBot(String botName, String botToken, String mdEventId, boolean mdTestEvent) {
+    MDDniproBot(String botName, String botToken) {
         // TODO: Configure options, e.g. multithreading
         super()
 
         this.botName = botName
         this.botToken = botToken
-        this.mdEventId = mdEventId
-        this.mdTestEvent = mdTestEvent
 
         store_languages = ChronicleMapBuilder.of(CharSequence.class, Language.class)
                 .name("store_languages")
@@ -287,15 +231,6 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                 .entries(5000)
                 .createOrRecoverPersistedTo(new File('store_current_mission'))
 
-        /* TODO: hacking
-        store_ingress_username = ChronicleMapBuilder.of(CharSequence.class, String.class)
-                .name("store_ingress_username")
-                .averageKey("AAA")
-                .entries(5000)
-                .averageValueSize(20)
-                .createOrRecoverPersistedTo(new File('store_ingress_username'))
-        */
-
         println store_languages
         println store_messages
         println store_current_mission
@@ -316,7 +251,10 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                 sendInfo(update.message.chatId, update.message.from)
             } else {
                 // mission number
-                int missionNumber = Integer.parseInt(update.message.text)
+                int missionNumber = 0
+                try {
+                    missionNumber = Integer.parseInt(update.message.text)
+                } catch (ignored) {}
                 if (missionNumber >= 1 && missionNumber <= 24) {
                     store_current_mission[update.message.from.userName] = missionNumber
                     replyMissionDescription(update.message.chatId, update.message.from)
@@ -357,11 +295,6 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                         replyMissionDescription(query.message.chatId, query.from)
                     }
                     break
-                /* TODO: hacking
-                case CMD_PREREG:
-                    replyPrereg(query.message.chatId, query.from)
-                    break
-                */
             }
         }
     }
@@ -516,51 +449,6 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         replyMissionDescription(query.message.chatId, query.from)
     }
 
-    /*
-    TODO: hacking
-    // UNFORTUNATELY MD REGISTRAR APP IS ENCODING THE QR CODE.
-    // AND I COULD NOT CRACK IT
-
-    private replyPrereg(long chatId, User user) {
-        Language language = detectUserLanguage(user)
-        deletePastMessages(chatId, user)
-
-        Message photoMessage = null
-        String uiMessage = null
-
-        String ingressName = store_ingress_username[user.userName]
-        if (ingressName) {
-            photoMessage = sendPhoto generateQRcode(chatId, ingressName)
-            uiMessage = UI_PREREG_OLDs[language].replace('{ingress}', ingressName)
-        } else {
-            uiMessage = UI_PREREG_NEWs[language]
-        }
-
-        def mainMessage = dniproSendMessage(new SendMessage().tap {
-            it.chatId = chatId
-            it.parseMode = 'Markdown'
-            it.text = uiMessage
-            it.replyMarkup = KEYBOARD_INFOs[language]
-        })
-
-        store_messages.put(user.userName, photoMessage ? [photoMessage.messageId, mainMessage.messageId] : [mainMessage.messageId])
-    }
-
-    private SendPhoto generateQRcode(long chatId, String userName) {
-        SendPhoto qrcode = new SendPhoto()
-        qrcode.chatId = chatId
-
-        long userId = Long.parseLong(userName.digest('MD5').substring(10,18), 16)
-        String qrcodeMessage = "{nickname:\"${userName}\", regNum:89991001, eventId:\"11-aug-2018-dnipro--ukraine\", cityId:0, countryId: 0, telegram: \"\", test:false}"
-        String encoded = AESCrypt.encrypt(Constants.INSTANCE.getMARUSHKA(), qrcodeMessage)
-        QRCode code = QRCode.from(encoded).withSize(550, 550)
-        qrcode.setNewPhoto("Reg ${userName}", new ByteArrayInputStream(code.stream().toByteArray()))
-
-        qrcode
-    }
-    */
-
-
     private Language detectUserLanguage(User user) {
         // Try to read from settings
         Language language = store_languages[user.userName]
@@ -680,8 +568,6 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
     /* ****************************************** */
     private String botName
     private String botToken
-    private String mdEventId
-    private boolean mdTestEvent
 
     @Override
     String getBotUsername() {
@@ -702,26 +588,24 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
     static void main(String... args) {
         println 'Telegram Bot for Ingress Mission Day to be held 11 August 2018 in Dnipro, Ukraine.'
         println 'Maintained by @mihmax'
-        println 'Version 6'
+        println 'Version 7-alpha'
         println "Today is ${new Date()}"
         println ''
 
-        if (! (args.length in [3,4])) {
-            println 'ERROR: REQUIRES 3 or 4 ARGUMENTS'
-            println 'Usage: java -jar mdbot.jar "Telegram Bot Name" "Telegram Bot Token" "MD Registrar Event ID" "true if this MD Registrar event is considered a test one"'
+        if (args.length < 2) {
+            println 'ERROR: REQUIRES 2 ARGUMENTS'
+            println 'Usage: java -jar mdbot.jar "Telegram Bot Name" "Telegram Bot Token"'
             println ''
-            System.exit -1
+            System.exit(-1)
         }
 
         String botName = args[0]
         String botToken = args[1]
-        String mdEventId = args[2]
-        boolean mdTestEvent = args.length == 4 ? args[3] == 'true' : false
 
         ApiContextInitializer.init()
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi()
         try {
-            telegramBotsApi.registerBot(new MDDniproBot(botName, botToken, mdEventId, mdTestEvent))
+            telegramBotsApi.registerBot(new MDDniproBot(botName, botToken))
         } catch (TelegramApiException e) {
             e.printStackTrace()
         }
