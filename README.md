@@ -24,8 +24,14 @@ Maintained by @mihmax.
 # TODO
 
 * Read all content (no hardcoded content)
-* Variable mission number (currently 24 missions are hardcoded)
-* Code Cleanup
 * Robust storage (currently Chronicle Maps is used for multiple String - String maps)
 ** Part 1 - is Chronicle Maps really needed? (27MB or ~ 15% of libraries that do not run on Java 10)
 ** Part 2 - move all settings to one serializable class to store in 1 Chronicle Map
+
+# Release Notes
+
+* Version 7 - post-Dnipro improvements
+  * Alpha - Code Cleanup, Variable Number of missions
+* Version 6 - removed QR code generation, **Final Version that was running during Dnipro Mission Day**
+* Version 5 - final test
+* Versions 0-4 - debug and experimentation
