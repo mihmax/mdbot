@@ -33,6 +33,7 @@ Maintained by @mihmax.
 
 * Version 7 - post-Dnipro improvements
   * Alpha - Code Cleanup, Variable Number of missions
+  * Beta - Map of all missions
 * Version 6 - removed QR code generation,
   **Final Version that was running during Dnipro Mission Day**
 * Version 5 - final test

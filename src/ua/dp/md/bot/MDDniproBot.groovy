@@ -1,21 +1,12 @@
 package ua.dp.md.bot
 
+import net.openhft.chronicle.map.ChronicleMap
+import net.openhft.chronicle.map.ChronicleMapBuilder
 import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.TelegramBotsApi
 import org.telegram.telegrambots.api.methods.BotApiMethod
-import org.telegram.telegrambots.exceptions.TelegramApiException
-import org.telegram.telegrambots.exceptions.TelegramApiRequestException
-
-import java.util.concurrent.ArrayBlockingQueue
-
-import static ua.dp.md.bot.Language.EN
-import static ua.dp.md.bot.Language.RU
-import static ua.dp.md.bot.Language.UK
-import net.openhft.chronicle.map.ChronicleMap
-import net.openhft.chronicle.map.ChronicleMapBuilder
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendPhoto
-import org.telegram.telegrambots.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.api.objects.CallbackQuery
 import org.telegram.telegrambots.api.objects.Message
@@ -24,11 +15,16 @@ import org.telegram.telegrambots.api.objects.User
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.exceptions.TelegramApiException
+import org.telegram.telegrambots.exceptions.TelegramApiRequestException
 
+import java.util.concurrent.ArrayBlockingQueue
+
+import static ua.dp.md.bot.Language.*
 
 /**
  * @author Maxym "mihmax" Mykhalchuk
- * @version 7-alpha
+ * @version 7-beta
  *
  * Telegram Bot for Dnipro Mission Day to be held 11 August 2018.
  * Maintained by @mihmax.
@@ -203,6 +199,13 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
     private ChronicleMap<CharSequence, List<Integer>> store_messages
     private ChronicleMap<CharSequence, Integer> store_current_mission
     private List<MissionData> missions
+    private File allMissionsPhoto = new File('./missions/allMap.png')
+    private Map<Language, String> allMissionsDescriptions = [
+            (EN): '*Map of all missions*',
+            (UK): '*Мапа всіх місій*',
+            (RU): '*Карта всех миссий*'
+    ]
+
 
     MDDniproBot(String botName, String botToken) {
         // TODO: Configure options, e.g. multithreading
@@ -237,7 +240,6 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
 
         // Read mission data
         missions = MissionData.readMissions(new File('./missions/'))
-        //println missions
     }
 
     @Override
@@ -276,6 +278,8 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
                     replyLanguage(query)
                     break
                 case CMD_MISSIONS:
+                    replyAllMissionsMap(query.message.chatId, query.from)
+                    break
                 case CMD_DESC:
                     replyMissionDescription(query.message.chatId, query.from)
                     break
@@ -363,6 +367,22 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
         reply.replyMarkup = KEYBOARD_INFOs[language]
 
         dniproSendMessage reply
+    }
+
+    // v7-beta
+    private void replyAllMissionsMap(long chatId, User user) {
+        Language language = detectUserLanguage(user)
+        deletePastMessages(chatId, user)
+
+        Message photoMessage = dniproSendPhoto(chatId, allMissionsPhoto)
+        def mainMessage = dniproSendMessage(new SendMessage().tap {
+            it.chatId = chatId
+            it.parseMode = 'Markdown'
+            it.text = allMissionsDescriptions[language]
+            it.replyMarkup = KEYBOARD_MISSIONs[language]
+        })
+
+        store_messages.put(user.userName, [photoMessage.messageId, mainMessage.messageId])
     }
 
     /**
@@ -588,7 +608,7 @@ We will be very glad to see everyone who wants to explore Dnipro with us and inv
     static void main(String... args) {
         println 'Telegram Bot for Ingress Mission Day to be held 11 August 2018 in Dnipro, Ukraine.'
         println 'Maintained by @mihmax'
-        println 'Version 7-alpha'
+        println 'Version 7-beta'
         println "Today is ${new Date()}"
         println ''
 
